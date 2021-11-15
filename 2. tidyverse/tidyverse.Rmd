@@ -52,8 +52,17 @@ variable_auxililar <- nobel %>% count()
 print(paste("Premio en total:",variable_auxililar))
 
 # Premios entre 1950 y 2000
-
+nobel %>% count(1950<=year & year<=2000)
 
 # Muestra esa variable con un mensaje
+
+```
+
+¿Cuántos hombres y cuantas mujeres han ganado un premio nobel?
+
+```{r}
+
+# Premios separados según género:
+    nobel %>% group_by(sex) %>% count()
 
 ```
