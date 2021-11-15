@@ -1,0 +1,59 @@
+En primer lugar debemos leer el fichero que tiene como nombre *nobel.csv*. 
+
+
+```{r}
+# Libreria tidyverse
+library(tidyverse)
+
+# Librería dplyr
+library(dplyr)
+
+# Librería ggplot2
+library(ggplot2)
+
+```
+
+```{r}
+
+# Lectura cdel fichero:
+getwd()
+nobel <- read.csv("C:/Users/david/Desktop/Programing/R/Pisces/2. tidyverse/data/nobel.csv")
+
+# Un primer vistazo a los datos
+nobel
+head(nobel)
+
+
+```
+
+```{r}
+
+# Nombre de las columnas
+colnames(nobel)
+
+```
+
+Estudie la dimensión del *dataset*. 
+
+```{r}
+
+# Dimensión o tamaño de los datos
+dim(nobel)
+
+```
+
+### Exploración: 
+
+¿Cuántos premios se han concedido en total? 
+
+```{r}
+#Cuantos premios
+variable_auxililar <- nobel %>% count()
+print(paste("Premio en total:",variable_auxililar))
+
+# Premios entre 1950 y 2000
+
+
+# Muestra esa variable con un mensaje
+
+```
