@@ -77,3 +77,46 @@ nobel %>% group_by(birth_city) %>% count() %>% arrange(desc(n))
 
 ```
 
+### Premios de Estados Unidos: 
+
+¿Qué porcentaje de ganadores de EEUU hay en cada década? 
+
+```{r}
+
+# 1) Se añade una columna que indique si es o no de EEUU
+# 2) Se calculan las décadas
+# 3) Se agrupa por década y se calcula el porcentaje asociado a la columna creada
+# Ver el experimento para entender el paso 3
+
+porcentaje_ganadores_usa <- nobel %>% mutate(ganadores_usa = (birth_country == "United States of America")) %>% 
+mutate(decada = floor(year/10)*10) %>%
+group_by(decada) %>% summarise(porcentaje = mean(ganadores_usa, na.rm = TRUE)*100) %>% arrange(desc(decada))
+
+porcentaje_ganadores_usa
+```
+
+Al programar se suelen hacer pruebas cuando no se entiende algo y de ahí viene esta cajita con un experimento pequeño. 
+
+```{r}
+
+# ---- Experimento para entender el código anterior
+
+v1<-c(TRUE,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE)
+mean(v1)
+
+v2<-c(TRUE,TRUE,TRUE,FALSE,TRUE,NaN,TRUE,FALSE,FALSE,NaN)
+mean(v2,na.rm = TRUE)
+
+# ----
+
+```
+
+
+Realizamos un dibujo con el porcentaje de ganadores de EEUU por década. 
+
+
+```{r}
+
+# En el eje X van las décadas y en el Y el porcentaje asociado. 
+
+```
