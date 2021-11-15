@@ -66,3 +66,14 @@ nobel %>% count(1950<=year & year<=2000)
     nobel %>% group_by(sex) %>% count()
 
 ```
+
+Cuente el número de premios según países y ordene los datos según este valor obtenido. Realice la ordenación de manera descendente de tal forma que el país con más premios aparezca en primer lugar. 
+
+```{r}
+
+# Contamos por países: columna birth_country
+# [Nota: se ordena poniendo "desc(n)" dentro del verbo arrange, siendo n el valor que se cuenyta]
+nobel %>% group_by(birth_city) %>% count() %>% arrange(desc(n))
+
+```
+
