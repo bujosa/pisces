@@ -118,5 +118,5 @@ Realizamos un dibujo con el porcentaje de ganadores de EEUU por década.
 ```{r}
 
 # En el eje X van las décadas y en el Y el porcentaje asociado. 
-
+porcentaje_ganadores_usa %>% ggplot(aes(x = decada, y = porcentaje)) + geom_line() + theme_bw() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
