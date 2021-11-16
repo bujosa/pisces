@@ -1,0 +1,268 @@
+---
+title: "Contraste de hipótesis. Proyecto gatos"
+output: html_notebook
+#author: "Isabel A. Nepomuceno Chamorro"
+---
+
+
+# A/B testing.
+
+El término test A/B se utiliza para describir experimentos aleatorios con dos variantes, A y B, siendo una la de control y la otra la variante.
+
+Se utiliza ampliamente en el campo del diseño de páginas web (especialmente, cuando se diseñan experiencias de usuario) el objetivo es identificar los cambios que incrementan o maximizan un resultado determinado, como por ejemplo realizar más click en un botón determinado de la web.
+
+## Caso de uso: diseño experimental.
+
+Supongamos el siguiente experimento, tenemos una página web para adoptar mascotas que han sido abandonadas. En primer lugar se colocó una foto de un gatito que daba pena al lado del botón de "Adopta ahora" y se quería saber si en lugar de esa foto, una foto más vistosa de un gatito, incrementaría el número de adopciones de las personas que visitaran la web. 
+
+
+En resumen, estamos tratando con el siguiente problema:
+
+- Cuestión: ¿Cambiar la foto de la página de inicio resultará en más clics de "ADOPTAR AHORA"?
+
+- Hipótesis: Usar una foto de un gato más mono resultará en más clics de "ADOPTAR AHORA".
+
+- Variable dependiente: Haga clic en el botón "ADOPTAR AHORA" o no.
+
+- Variable independiente: Foto de la página de inicio.
+
+Observa, que el test A/B hace referencia  a analizar qué sucede como resultado de un experimento.
+
+### Datos originales con el gatito feo.
+
+```{r}
+# cargar la librería tidyverse
+#__________(tidyverse)
+
+# Leer el dataset click_data.csv 
+#click_data <- _________("______________click_data.csv")
+
+
+# Obtener el máximo y mínimo del dataset de la columna visit_date
+# oldest <- __________________________
+# recent <- __________________________
+
+
+```
+
+### Conversion rate o tasa de conversión.
+
+Vamos a calcular la línea base de ratio de conversión de la página web. El ratio de conversión es la media de personas que visitan una página web y realiza la acción que esperamos. Y la línea base se define como el número de acciones realizadas con éxito en la página web en media.
+
+```{r}
+# Utilizamos la función summarize de dplyr y usando el conector pepe conectamos nuestros datos con la función.
+#_____dataset_____ %>%
+#   summarize(____nombre____ = ___calculo_de_la_media____)  # usar la función mean para 
+                                                            # obtener promedio 
+
+```
+
+Lo que significa que unos 27 de cada 100 visitantes del sitio web al que se ha hecho clic "Adopta ahora" con la imagen actual de la página de inicio. Este cálculo del ratio de conversión se ha hecho para todo el año, pero podemos realizar este cálculo por meses, ya que puede que en ciertos meses la gente esté más propensa a adoptar mascotas. Para ello utilizamos:
+- la función group_by del paquete dplyr
+- la función month del paquete lubridate
+
+```{r}
+# Carga la librería lubridate
+#___________(lubridate)
+
+# ___________ %>%
+#   group_by_________________ %>%
+#   summarize__________________________
+```
+
+
+También se podría observar el ratio de conversión por semana utilizando la función week:
+
+```{r}
+# Calculate the mean conversion rate by week of the year
+
+
+```
+
+Vamos a visualizar el ratio de conversión por semanas utilizando la librería ggplot.
+
+```{r}
+
+library(scales)
+
+# repite la instrucción anterior de cálculo de ratio de conversion por semanas y almacene dicho resultado en una variable de nombre click_data_sum
+click_data_sum <- click_data %>%
+  group_by(week(visit_date)) %>%
+  summarize(conversion_rate = mean(clicked_adopt_today))
+
+# utilice la función ggplot donde el eje x son las semanas calculadas con la función weeks
+# el eje y es el ratio de conversión
+# ggplot(click_data_sum, aes(x = `___`,
+#                            y = ___)) +
+#   ___() + # Función geom_point 
+#   ___() + # Función geom_line para el dibujado de la gráfica
+#   scale_y_continuous(limits = c(0, 1),
+#                      labels = percent)
+
+#También actualizamos nuestro gráfico un poco usando scale_y_continuous() para asegurarnos de que nuestros ejes van de 0 a 1 y convierten los valores a porcentajes. El ajuste porcentual proviene del paquete scales.
+
+```
+
+
+Este cálculo se realiza para observar cuál es la línea base con la que queremos comparar nuetro experimento. En la gráfica se obsserva que el comportamiento no es constante, en verano y a finales de año la media de personas que realizan la acción que esperamos (ratio de conversión) es mayor, el comportamiento varía según el momento del año.
+
+Este mismo ejercicio por mes quedaría de la siguiente forma:
+
+```{r}
+# click_data_month <- click_data %>%
+#   group_by(_______) %>%
+#   summarize(conversion_rate = __________)
+
+# utilice la función ggplot 
+# ggplot(click_data_month, aes(x = `____________`,
+#                            y = _______________)) +
+#   _________() +
+#   _________() +
+#   scale_y_continuous(limits = c(0, 1),
+#                      labels = percent)
+```
+
+
+En el caso de uso, tenemos que diseñar el experimento de dos condiciones: presionar si o no el botón de adoptar ahora. ¿Cuál cree que sería el mejor método para comparar las dos condiciones, es decir, control y test? Elija entre las siguientes opciones: 
+
+
+A) Ejecutar la condición de control durante un mes y luego probar la condición durante un mes.
+
+B) Utilizar los datos antiguos como condición de control y ejecutar la condición de test durante un mes.
+
+C) Ejecutar las condiciones de control y prueba simultáneamente durante dos meses.
+
+D) Ejecutar la condición de control durante un mes, esperar un año y luego ejecutar la condición de prueba durante un mes.
+
+
+Respuesta: 
+
+### Power analysis.
+
+Para decidir el tamaño de la muestra deberíamos realizar un "power analysis" tal como se indica en las transparencias.
+
+
+
+```{r}
+# Carga la librería powerMediation
+#________(powerMediation)
+
+# Escriba help de la función SSizeLogisticBin e indique cuál de las siguientes sentencias es correcta.
+# _______(SSizeLogisticBin)
+```
+
+Indica cuál de estas sentencias es correcta:
+
+A) La probabilidad de que X=0
+
+B) La probabilidad de que X=1
+
+c) La proporción del dataset a ser X=1
+
+La correcta es la B) es la probabilidad de que se de el suceso de test hacer click, o lo que es lo mismo, el valor esperado de que se cumpla el click.
+
+A continuación haz un nuevo análisis de potencia asumiendo que lo haremos en agosto.
+
+```{r}
+
+# Compute and look at sample size for experiment in August
+# total_sample_size <- SSizeLogisticBin(p1 = _____,
+#                                       p2 = _____,
+#                                       B = _____,
+#                                       alpha = ___,
+#                                       power = ___)
+# total_sample_size
+```
+
+Debemos utilizar 758 datos. Ejecuta el siguiente código, que sería calcular el tamaño de muestra para un incremento del 5%
+
+```{r}
+# Compute and look at sample size for experiment in August with a 5 percentage point increase
+# total_sample_size <- SSizeLogisticBin(p1 = _____,
+#                                       p2 = _____,
+#                                       B = 0.5,
+#                                       alpha = 0.05,
+#                                       power = 0.8)
+# total_sample_size
+```
+
+Observa que para un incremento menor el tamaño de muestra es mayor,teniendo 1543 muestras para cada grupo.
+
+
+## Caso de uso: experimento realizado.
+
+En este caso trabajamos con el dataset de nombre "experiment_data".
+
+
+```{r}
+# experiment_data_clean <- ________________
+# 
+# dim(___)
+# head(___)
+```
+
+Antes de realizar el test estadístico vamos a visualizar el ratio de conversión para las dos condiciones: test y control. 
+
+```{r}
+# Agrupar por condición test o control
+# experiment_data_clean_sum <- experiment_data_clean %>%
+#   group_by(___) %>%
+#   summarize(___)
+# 
+# experiment_data_clean_sum
+```
+
+La diferencia parece que es buena, pero ¿es estadísticamente significativa? Antes de entrar en ello, vamos a visualizar las diferencias para ver si ha habido una mejora. Para ello vamos a calcular el ratio de conversión pero por día. Para ello ejecute el siguiente código:
+
+
+```{r}
+# Create a new data frame called experiment_data_clean_sum that groups by both condition and visit_date
+# 
+# experiment_data_clean_sum <- ____ %>%
+#   group_by(___, ___) %>%
+#   summarize(conversion_rate = mean(clicked_adopt_today))
+
+# Use the new data frame to build the plot, setting color and group to condition
+# ggplot(___,
+#        aes(x = visit_date,
+#            y = conversion_rate,
+#            color = ___,
+#            group = ___)) +
+#   geom_point() +
+#   geom_line()
+```
+
+Se observa que en el caso de test, se mejora para todos los días el ratio de conversión. No obstante, vamos a realizar el test estadístico para comprobar que la diferencia es estadísticamente significativa, o lo que es lo mismo, es obtiene un p valor por debajo del valor 0.05
+
+Inicialmente decidimos utilizar una regresión logística, en R la implementa la función glm(). El primer parámetro es una función en donde se indican las variables dependientes e independientes del experimento con la siguiente sintaxis: 
+
+dependent variable ~ independent variable
+
+En nuestro caso la variable dependiente es hacer click y la indipendiente si es caso de test o control.
+
+
+
+```{r}
+library(broom)
+
+experiment_data <- read_csv("./dataset/experiment_data.csv")
+# 
+# glm(____ ~ _____,
+#     family = ____, # distribución del error
+#     data = ___) %>%  # operador pipe para enviar el modelo a la función tidy
+#   tidy()  # se añade del paquete broom para poner los resultados más "limpios"
+
+```
+
+Luego podemos decir que nuestro experimento ha sido todo un éxito.
+
+
+# Resumen
+
+El ejercicio que hemos hecho no ha sido más que aplicar el test de hipótesis de dos muestras. Este test es apropiado para estos casos en dónde se comparan dos muestras. Los test que se pueden utilizar según que distribución tenga los datos son los que se observa en:
+https://en.wikipedia.org/wiki/A/B_testing
+
+Este material se puede ampliar con el diseño de experimentos de seguimientos tal como se muestra en DataCamp: "A/B testing in R"
+
+
+
