@@ -1,7 +1,7 @@
 ---
 title: "Contraste de hipótesis. Proyecto gatos"
 output: html_notebook
-#author: "Isabel A. Nepomuceno Chamorro"
+#author: "David Bujosa"
 ---
 
 
@@ -32,16 +32,18 @@ Observa, que el test A/B hace referencia  a analizar qué sucede como resultado 
 
 ```{r}
 # cargar la librería tidyverse
-#__________(tidyverse)
+library(tidyverse)
 
 # Leer el dataset click_data.csv 
-#click_data <- _________("______________click_data.csv")
-
+getwd()
+click_data <- read.csv("./dataset/click_data.csv")
+head(click_data)
 
 # Obtener el máximo y mínimo del dataset de la columna visit_date
-# oldest <- __________________________
-# recent <- __________________________
-
+oldest <- min(click_data$visit_date)
+oldest
+recent <- max(click_data$visit_date)
+recent
 
 ```
 
@@ -51,9 +53,11 @@ Vamos a calcular la línea base de ratio de conversión de la página web. El ra
 
 ```{r}
 # Utilizamos la función summarize de dplyr y usando el conector pepe conectamos nuestros datos con la función.
-#_____dataset_____ %>%
-#   summarize(____nombre____ = ___calculo_de_la_media____)  # usar la función mean para 
-                                                            # obtener promedio 
+
+# Librería dplyr
+library(dplyr)
+
+click_data %>% summarise(porcentaje_click_adop_today = mean(click_data$clicked_adopt_today)*100)   # nolint
 
 ```
 
@@ -63,7 +67,7 @@ Lo que significa que unos 27 de cada 100 visitantes del sitio web al que se ha h
 
 ```{r}
 # Carga la librería lubridate
-#___________(lubridate)
+library(lubridate)
 
 # ___________ %>%
 #   group_by_________________ %>%
