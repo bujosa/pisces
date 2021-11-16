@@ -57,8 +57,8 @@ Vamos a calcular la línea base de ratio de conversión de la página web. El ra
 # Librería dplyr
 library(dplyr)
 
-click_data %>% summarise(porcentaje_click_adop_today = mean(click_data$clicked_adopt_today)*100)   # nolint
-
+baseline <- click_data %>% summarise(porcentaje_click_adop_today = mean(click_data$clicked_adopt_today)*100)   # nolint
+baseline
 ```
 
 Lo que significa que unos 27 de cada 100 visitantes del sitio web al que se ha hecho clic "Adopta ahora" con la imagen actual de la página de inicio. Este cálculo del ratio de conversión se ha hecho para todo el año, pero podemos realizar este cálculo por meses, ya que puede que en ciertos meses la gente esté más propensa a adoptar mascotas. Para ello utilizamos:
@@ -69,16 +69,19 @@ Lo que significa que unos 27 de cada 100 visitantes del sitio web al que se ha h
 # Carga la librería lubridate
 library(lubridate)
 
-click_data %>%
-  group_by(month = month(click_data$visit_date)) %>%
+baseline_per_month <- click_data %>%
+  group_by(month = month(visit_date)) %>%
   summarise(visit_month = mean(clicked_adopt_today)*100)
+baseline_per_month
 ```
 
 También se podría observar el ratio de conversión por semana utilizando la función week:
 
 ```{r}
 # Calculate the mean conversion rate by week of the year
-
+click_data %>%
+  group_by(week = week(click_data$visit_date)) %>%
+  summarise(visit_week = mean(clicked_adopt_today)*100)
 
 ```
 
@@ -88,19 +91,26 @@ Vamos a visualizar el ratio de conversión por semanas utilizando la librería g
 
 library(scales)
 
-# repite la instrucción anterior de cálculo de ratio de conversion por semanas y almacene dicho resultado en una variable de nombre click_data_sum
+# repite la instrucción anterior de cálculo de ratio de
+# conversion por semanas y almacene dicho resultado
+# en una variable de nombre click_data_sum
+
 click_data_sum <- click_data %>%
-  group_by(week(visit_date)) %>%
+  group_by(weeks = week(visit_date)) %>%
   summarize(conversion_rate = mean(clicked_adopt_today))
 
-# utilice la función ggplot donde el eje x son las semanas calculadas con la función weeks
+# utilice la función ggplot donde el eje x son las 
+# semanas calculadas con la función weeks
 # el eje y es el ratio de conversión
-# ggplot(click_data_sum, aes(x = `___`,
-#                            y = ___)) +
-#   ___() + # Función geom_point 
-#   ___() + # Función geom_line para el dibujado de la gráfica
-#   scale_y_continuous(limits = c(0, 1),
-#                      labels = percent)
+
+# Librería ggplot2
+library(ggplot2)
+
+ggplot(click_data_sum, aes(x = weeks,
+                           y = conversion_rate)) +
+  geom_point() + geom_line() + 
+  scale_y_continuous(limits = c(0, 1),
+                     labels = percent)
 
 #También actualizamos nuestro gráfico un poco usando scale_y_continuous() para asegurarnos de que nuestros ejes van de 0 a 1 y convierten los valores a porcentajes. El ajuste porcentual proviene del paquete scales.
 
