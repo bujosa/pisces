@@ -122,17 +122,16 @@ Este cálculo se realiza para observar cuál es la línea base con la que querem
 Este mismo ejercicio por mes quedaría de la siguiente forma:
 
 ```{r}
-# click_data_month <- click_data %>%
-#   group_by(_______) %>%
-#   summarize(conversion_rate = __________)
+click_data_month <- click_data %>%
+  group_by(month = month(visit_date)) %>%
+  summarize(conversion_rate =  mean(clicked_adopt_today))
 
 # utilice la función ggplot 
-# ggplot(click_data_month, aes(x = `____________`,
-#                            y = _______________)) +
-#   _________() +
-#   _________() +
-#   scale_y_continuous(limits = c(0, 1),
-#                      labels = percent)
+ggplot(click_data_month, aes(x = month,
+                           y = conversion_rate)) +
+  geom_point() + geom_line() + 
+  scale_y_continuous(limits = c(0, 1),
+                     labels = percent)
 ```
 
 
@@ -158,10 +157,10 @@ Para decidir el tamaño de la muestra deberíamos realizar un "power analysis" t
 
 ```{r}
 # Carga la librería powerMediation
-#________(powerMediation)
+library(powerMediation)
 
 # Escriba help de la función SSizeLogisticBin e indique cuál de las siguientes sentencias es correcta.
-# _______(SSizeLogisticBin)
+help(SSizeLogisticBin)
 ```
 
 Indica cuál de estas sentencias es correcta:

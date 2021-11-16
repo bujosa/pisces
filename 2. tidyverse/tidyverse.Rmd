@@ -8,8 +8,8 @@ library(tidyverse)
 # Librería dplyr
 library(dplyr)
 
-# Librería ggplot2
-library(ggplot2)
+    # Librería ggplot2
+    library(ggplot2)
 
 ```
 
