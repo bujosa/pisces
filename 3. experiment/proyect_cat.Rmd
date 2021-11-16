@@ -34,8 +34,7 @@ Observa, que el test A/B hace referencia  a analizar qué sucede como resultado 
 # cargar la librería tidyverse
 library(tidyverse)
 
-# Leer el dataset click_data.csv 
-getwd()
+# Leer el dataset click_data.csv
 click_data <- read.csv("./dataset/click_data.csv")
 head(click_data)
 
@@ -52,7 +51,8 @@ recent
 Vamos a calcular la línea base de ratio de conversión de la página web. El ratio de conversión es la media de personas que visitan una página web y realiza la acción que esperamos. Y la línea base se define como el número de acciones realizadas con éxito en la página web en media.
 
 ```{r}
-# Utilizamos la función summarize de dplyr y usando el conector pepe conectamos nuestros datos con la función.
+# Utilizamos la función summarize de dplyr y usando el 
+# conector pepe conectamos nuestros datos con la función.
 
 # Librería dplyr
 library(dplyr)
@@ -69,11 +69,10 @@ Lo que significa que unos 27 de cada 100 visitantes del sitio web al que se ha h
 # Carga la librería lubridate
 library(lubridate)
 
-# ___________ %>%
-#   group_by_________________ %>%
-#   summarize__________________________
+click_data %>%
+  group_by(month = month(click_data$visit_date)) %>%
+  summarise(visit_month = mean(clicked_adopt_today)*100)
 ```
-
 
 También se podría observar el ratio de conversión por semana utilizando la función week:
 
