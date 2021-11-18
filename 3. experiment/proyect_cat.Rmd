@@ -108,11 +108,14 @@ library(ggplot2)
 
 ggplot(click_data_sum, aes(x = weeks,
                            y = conversion_rate)) +
-  geom_point() + geom_line() + 
-  scale_y_continuous(limits = c(0, 1),
+  geom_point() + geom_line() + scale_y_continuous(limits = c(0, 1), # nolint
                      labels = percent)
 
-#También actualizamos nuestro gráfico un poco usando scale_y_continuous() para asegurarnos de que nuestros ejes van de 0 a 1 y convierten los valores a porcentajes. El ajuste porcentual proviene del paquete scales.
+#También actualizamos nuestro gráfico un 
+# poco usando scale_y_continuous() para 
+# asegurarnos de que nuestros ejes van de 0 a 1 
+# y convierten los valores a porcentajes. 
+# El ajuste porcentual proviene del paquete scales.
 
 ```
 
@@ -178,24 +181,25 @@ A continuación haz un nuevo análisis de potencia asumiendo que lo haremos en a
 ```{r}
 
 # Compute and look at sample size for experiment in August
-# total_sample_size <- SSizeLogisticBin(p1 = _____,
-#                                       p2 = _____,
-#                                       B = _____,
-#                                       alpha = ___,
-#                                       power = ___)
-# total_sample_size
+total_sample_size <- SSizeLogisticBin(p1 = 0.54,
+                                      p2 = 0.59,
+                                      B = 0.5,
+                                      alpha = 0.05,
+                                      power = 0.8)
+total_sample_size
 ```
 
 Debemos utilizar 758 datos. Ejecuta el siguiente código, que sería calcular el tamaño de muestra para un incremento del 5%
 
 ```{r}
-# Compute and look at sample size for experiment in August with a 5 percentage point increase
-# total_sample_size <- SSizeLogisticBin(p1 = _____,
-#                                       p2 = _____,
-#                                       B = 0.5,
-#                                       alpha = 0.05,
-#                                       power = 0.8)
-# total_sample_size
+# Compute and look at sample size for experiment in 
+# August with a 5 percentage point increase
+total_sample_size <- SSizeLogisticBin(p1 = 0.54,
+                                      p2 = 0.64,
+                                      B = 0.5,
+                                      alpha = 0.05,
+                                      power = 0.8)
+total_sample_size
 ```
 
 Observa que para un incremento menor el tamaño de muestra es mayor,teniendo 1543 muestras para cada grupo.
@@ -207,10 +211,10 @@ En este caso trabajamos con el dataset de nombre "experiment_data".
 
 
 ```{r}
-# experiment_data_clean <- ________________
-# 
-# dim(___)
-# head(___)
+experiment_data_clean <- read.csv("./dataset/experiment_data.csv")
+
+dim(experiment_data_clean)
+head(experiment_data_clean)
 ```
 
 Antes de realizar el test estadístico vamos a visualizar el ratio de conversión para las dos condiciones: test y control. 
