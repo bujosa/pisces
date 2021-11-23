@@ -1,0 +1,32 @@
+---
+title: "Proyecto de Supervivencia TITANIC"
+output: html_notebook
+#author: "David Bujosa"
+---
+
+
+# A/B testing.
+
+El término test A/B se utiliza para describir experimentos aleatorios con dos variantes, A y B, siendo una la de control y la otra la variante.
+
+Se utiliza ampliamente en el campo del diseño de páginas web (especialmente, cuando se diseñan experiencias de usuario) el objetivo es identificar los cambios que incrementan o maximizan un resultado determinado, como por ejemplo realizar más click en un botón determinado de la web.
+
+## Caso de uso: diseño experimental.
+
+Supongamos el siguiente experimento, tenemos una página web para adoptar mascotas que han sido abandonadas. En primer lugar se colocó una foto de un gatito que daba pena al lado del botón de "Adopta ahora" y se quería saber si en lugar de esa foto, una foto más vistosa de un gatito, incrementaría el número de adopciones de las personas que visitaran la web. 
+
+```{r}
+# cargar la librería tidyverse
+library(tidyverse)
+
+# Leer el dataset click_data.csv
+click_data <- read.csv("./dataset/click_data.csv")
+head(click_data)
+
+# Obtener el máximo y mínimo del dataset de la columna visit_date
+oldest <- min(click_data$visit_date)
+oldest
+recent <- max(click_data$visit_date)
+recent
+
+```
