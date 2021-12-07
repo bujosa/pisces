@@ -112,16 +112,15 @@ tuneGrid = expand.grid(alpha = 0:1,
                          lambda = seq(0.0001, 1, length = 20))
 
 ```{r}
-# # Train glmnet with custom trainControl and tuning: model
-# model_class_glmnet_tuning <- ___________________(
-#   ___________________ , df_clas,
-#   tuneGrid = ___________________(___________________,
-#                          ______________________________________),
-#   method = ___________________,
-#   trControl = ___________________
-# )
-# 
-# model_class_glmnet_tuning
+# Train glmnet with custom trainControl and tuning: model
+
+tune_grid <- expand.grid(alpha = 0:1,
+                         lambda = seq(0.0001, 1, length = 20))
+
+model_class_glmnet_tuning <- trainControl(Status_E2_C3~ ., df_clas, tuneGrid=tune_grid # nolint
+, method = "glmnet", trControl = my_control_class)
+
+model_class_glmnet_tuning
 ```
 
 ## Función train: xgbTree
@@ -129,10 +128,9 @@ tuneGrid = expand.grid(alpha = 0:1,
 Vamos a generar el modelo utilizando uno de los algoritmos TOP en kaggle. Es uno de los algoritmos más utilizados últimamente
 
 ```{r}
-# model_clas_xgbTree <- ___________________(___________________ , df_clas,
-#                             method = ___________________,
-#                             trControl=___________________)
+model_class_xgbTree <- train(Status_E2_C3~ ., df_clas, method = "xgbTree", trControl=my_control_class) # nolint
 
+model_class_xgbTree
 ```
 
 
@@ -141,15 +139,15 @@ Vamos a generar el modelo utilizando uno de los algoritmos TOP en kaggle. Es uno
 Para comparar modelos Caret hace automáticamente un remuestreo para comparar distintos modelos en igualdad de condiciones. Esto lo hace con la función resamples a la que le pasamos una lista con los modelos generados anteriormente.
 
 ```{r}
-# model_list <- list(
-#   glm = ___________________, 
-#   glmnet = ___________________,
-#   glmnet_tunning = ___________________,
-#   xgbTree = ___________________
-# )
-# 
-# # Pass model_list to resamples(): resamples
-# resamples <- resamples(___________________)
+model_list <- list(
+  glm = model_class_glm,
+  glmnet = model_class_glmnet,
+  glmnet_tunning = model_class_glmnet_tuning,
+  xgbTree = model_class_xgbTree
+)
+
+# Pass model_list to resamples(): resamples
+resamples <- resamples(model_list)
 
 ```
 
@@ -157,14 +155,11 @@ Finalmente, vamos a mostrar gráficamente los resultados obtenidos, con lo que d
 
 Para ello en la función summary escriba como parámetro de entrada la variable resample
 ```{r}
-# # Summarize the results
-# summary(___________________, metric="ROC")
-# 
-# # GENIAL PARA VER COMPARATIVA DE MANERA VISUAL
-# bwplot(___________________, metric = "ROC") # display univariate visualizations of the resampling distributions
-# dotplot(___________________, metric="ROC")
-
-
+# Summarize the results
+summary(resamples, metric="ROC") # nolint
+# GENIAL PARA VER COMPARATIVA DE MANERA VISUAL
+bwplot(resamples, metric="ROC") # nolint
+dotplot(resamples, metric="ROC") # nolint
 ```
 
 
