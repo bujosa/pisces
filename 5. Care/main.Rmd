@@ -1,0 +1,180 @@
+---
+title: "Práctica Clasificación: Caret"
+student: "David Bujosa"
+---
+
+
+## Paquete Caret
+
+El paquete R de nombre Caret ha sido desarrollado recientemente por Zachary Deane-Mayer y Max Kuhn. Es un conjunto de funciones para facilitar, mejorar y optimizar el proceso de crear modelos predictivos. El paquete contiene funciones para:
+- división de datos
+- preprocesado
+- selección de atributos
+- parametrización de modelos (model tuning using resampling)
+- estimación de importancia de variables o ranking (variable importance estimation)
+
+Toda la documentación de caret puedes encontrarla en:
+
+http://topepo.github.io/caret/index.html
+
+Si seleccionas "availables models" te encuentras que puedes usar unos 237 modelos http://topepo.github.io/caret/available-models.html
+
+
+En primer lugar, para trabajar, instala el paquete y cargue la librería en su sesión de R. 
+
+```{r}
+
+#library(caret)
+```
+
+
+
+A continuación cargue los datos utilizando el fichero proporcionado en la plataforma de enseñanza virtual junto a este fichero. 
+
+El dataset consiste en un problema clínico real de pacientes de oncología radioterápica de cancer de pulmón. El dataset consiste en 138 pacientes con 90 variables tras pasar las variables categóricas a numérico. Este paso incrementa el número de variables ya que una variable categórica se traduce a tantas variables como valores distintos tenga dicha variable. 
+
+El objetivo de este estudio consistió en observar si se obtenía un modelo predictivo de supervivencia para pacientes de cancer de pulmón mejor que el utilizado basado en 5 guías clínicas. La variable objetivo es: Status_E2_C3 (fallecido o vivo). Las guías clínicas son: Histologia_E1_C1, Estadio_clinico_E1_C1, Cirugia_E1_C1, QT y RT_Pulmonar_E1_C1. 
+
+
+```{r}
+
+# df_clas <- read.csv2("dataset.csv")
+# dim(df_clas)
+#head(df_clas)
+
+```
+
+
+## Función trainControl
+
+La validación cruzada proporciona multiples estimaciones de error, en lugar de una estimación única como es el caso de test/train. Si todos las estimaciones son similares podemos estar seguros de la precisión del modelo, por el contrario si las estimaciones tienen resultados muy diferentes indican que el modelo no funciona de manera consistente y no es muy bueno. 
+
+Caret soporta muchos tipos de validación cruzada, y se puede especificar cualquier tipo de validación cruzada la función  trainControl. En la siguiente página puedes encontrar documentación sobre la función y sus parámetros:
+
+https://topepo.github.io/caret/model-training-and-tuning.html
+
+También puede escribir en la consola 'help(trainControl)' para ver la documentación de la función. De los parámetros disponibles fíjate en los siguientes parámetros: method, number, summaryFunction, classProbs, savePredictions y verboseIter. Tras estudiar estos parámetros, incialízelos de forma que indique: 
+- validación cruzada 
+- tamaño fold 10
+- guarde las predicciones
+- active el modo verbose
+- finalmente, el parámetro summaryFunction y classProbs deben indicar que queremos calcular curvas ROC y para ello nuestro modelo debe proporcionar no solo predicción de clase sino probabilidad de la predicción. Con este objetivo escriba:
+  - summaryFunction = twoClassSummary,
+  - classProbs = TRUE, # IMPORTANT!
+ 
+
+
+```{r}
+# myControl_clas <- trainControl(
+#   method = "cv",
+#   number = 10,
+#   summaryFunction = twoClassSummary,
+#   classProbs = TRUE, # IMPORTANT!
+#   savePredictions = TRUE,
+#   verbose = FALSE
+# )
+```
+
+
+
+## Función train: logistic regression model
+
+Esta función train es la que entrena uno de los 238 modelos a usar. Entre en la documentación anterior del paquete Caret y lea sobre la función train y los parámetros: form, data, method y trControl.
+
+Como primera aproximación al problema vamos a crear un modelo con la función glm, que genera un logistic regression model. Digamos que es una versión avanzada de lm() linear model que nos permite más modelos de regresión. Para ello escriba:
+- como primer parámetro la fórmula con la que indica que la variable objetivo a predecir es Status_E2_C3 y se va a predecir en función del resto.
+- el segundo parámetro es el data frame df_clas
+- el parámetro method es gml
+- y el parámetro trControl tiene como valor el resultado de la función trainControl que se almacenó en la variable myControl_clas
+
+
+```{r}
+# model_clas_glm <- train(Status_E2_C3~ ., df_clas,
+#                        method="glm",
+#                        trControl=myControl_clas)
+```
+
+## Función train: glmnet
+
+El método glmnet genera modelos de regresión penalizado o clasificación. Genera una ecuación lineal y estos modelos imponen restricciones a los coeficientes con el objetivo de evitar sobreajuste. Esta técnica es muy útil para conjunto de datos con un elevado número de variables predictoras y pocos valores. Con el valor alfa podemos conseguir dos tipos de penalizaciones: 
+- Ridge regression (alpha = 0). Penaliza la cantidad de coeficientes distintos de cero
+- Lasso regression (alpha = 1). Penaliza valores absolutos altos de coeficientes
+
+GLMNET intenta obtener un modelo simple y para ello proporciona un valor alpha entre 0 y 1 que mezcla ridge y lasso. Con el valor de lambda ajusta el tamaño de la restricción. 
+
+Para el próximo código utilice la función train exactamente igual que antes indicando el nuevo modelo a calcular. Los parámetros del algoritmo glmnet son por defecto y esto aplicará tres valores de alpha y 3 de lambda. Finalmente, imprima el modelo para ver cómo se ha generado.
+
+```{r}
+
+# model_class_glmnet <- ___________________(
+#   ___________________, df_clas,
+#   method = ___________________,
+#   trControl = ___________________
+# ) # aplica 3 valores de alpha y 3 valores de lambda
+# 
+# model_class_glmnet
+
+```
+
+La función train nos permite hacer un grid de parámetros del modelo para ver cuál es la mejor opción. Para ello utilice el parámetro tuneGrid = e iguale al resultado de la función expand.grid tal como se indica a continuación: 
+
+tuneGrid = expand.grid(alpha = 0:1,
+                         lambda = seq(0.0001, 1, length = 20))
+
+```{r}
+# # Train glmnet with custom trainControl and tuning: model
+# model_class_glmnet_tuning <- ___________________(
+#   ___________________ , df_clas,
+#   tuneGrid = ___________________(___________________,
+#                          ______________________________________),
+#   method = ___________________,
+#   trControl = ___________________
+# )
+# 
+# model_class_glmnet_tuning
+```
+
+## Función train: xgbTree
+
+Vamos a generar el modelo utilizando uno de los algoritmos TOP en kaggle. Es uno de los algoritmos más utilizados últimamente
+
+```{r}
+# model_clas_xgbTree <- ___________________(___________________ , df_clas,
+#                             method = ___________________,
+#                             trControl=___________________)
+
+```
+
+
+## Comparativa de modelos
+
+Para comparar modelos Caret hace automáticamente un remuestreo para comparar distintos modelos en igualdad de condiciones. Esto lo hace con la función resamples a la que le pasamos una lista con los modelos generados anteriormente.
+
+```{r}
+# model_list <- list(
+#   glm = ___________________, 
+#   glmnet = ___________________,
+#   glmnet_tunning = ___________________,
+#   xgbTree = ___________________
+# )
+# 
+# # Pass model_list to resamples(): resamples
+# resamples <- resamples(___________________)
+
+```
+
+Finalmente, vamos a mostrar gráficamente los resultados obtenidos, con lo que de manera visual podremos decidir cuál es el mejor modelo.
+
+Para ello en la función summary escriba como parámetro de entrada la variable resample
+```{r}
+# # Summarize the results
+# summary(___________________, metric="ROC")
+# 
+# # GENIAL PARA VER COMPARATIVA DE MANERA VISUAL
+# bwplot(___________________, metric = "ROC") # display univariate visualizations of the resampling distributions
+# dotplot(___________________, metric="ROC")
+
+
+```
+
+
