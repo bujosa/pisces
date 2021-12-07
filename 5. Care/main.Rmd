@@ -58,14 +58,16 @@ También puede escribir en la consola 'help(trainControl)' para ver la documenta
   - classProbs = TRUE, # IMPORTANT!
  
 ```{r}
-# myControl_clas <- trainControl(
-#   method = "cv",
-#   number = 10,
-#   summaryFunction = twoClassSummary,
-#   classProbs = TRUE, # IMPORTANT!
-#   savePredictions = TRUE,
-#   verbose = FALSE
-# )
+my_control_class <- trainControl(
+  method = "cv",
+  number = 10,
+  summaryFunction = twoClassSummary,
+  classProbs = TRUE, # IMPORTANT!
+  savePredictions = TRUE,
+  verbose = FALSE
+)
+
+my_control_class
 ```
 
 
