@@ -23,11 +23,8 @@ Si seleccionas "availables models" te encuentras que puedes usar unos 237 modelo
 En primer lugar, para trabajar, instala el paquete y cargue la librería en su sesión de R. 
 
 ```{r}
-
-#library(caret)
+library(caret)
 ```
-
-
 
 A continuación cargue los datos utilizando el fichero proporcionado en la plataforma de enseñanza virtual junto a este fichero. 
 
@@ -37,11 +34,9 @@ El objetivo de este estudio consistió en observar si se obtenía un modelo pred
 
 
 ```{r}
-
-# df_clas <- read.csv2("dataset.csv")
-# dim(df_clas)
-#head(df_clas)
-
+df_clas <- read.csv2("data/dataset.csv")
+dim(df_clas)
+head(df_clas)
 ```
 
 
@@ -62,8 +57,6 @@ También puede escribir en la consola 'help(trainControl)' para ver la documenta
   - summaryFunction = twoClassSummary,
   - classProbs = TRUE, # IMPORTANT!
  
-
-
 ```{r}
 # myControl_clas <- trainControl(
 #   method = "cv",
