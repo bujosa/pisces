@@ -117,7 +117,7 @@ tuneGrid = expand.grid(alpha = 0:1,
 tune_grid <- expand.grid(alpha = 0:1,
                          lambda = seq(0.0001, 1, length = 20))
 
-model_class_glmnet_tuning <- trainControl(Status_E2_C3~ ., df_clas, tuneGrid=tune_grid # nolint
+model_class_glmnet_tuning <- train(Status_E2_C3~ ., df_clas, tuneGrid=tune_grid # nolint
 , method = "glmnet", trControl = my_control_class)
 
 model_class_glmnet_tuning
@@ -128,9 +128,9 @@ model_class_glmnet_tuning
 Vamos a generar el modelo utilizando uno de los algoritmos TOP en kaggle. Es uno de los algoritmos más utilizados últimamente
 
 ```{r}
-model_class_xgbTree <- train(Status_E2_C3~ ., df_clas, method = "xgbTree", trControl=my_control_class) # nolint
+model_class_xgb_tree <- train(Status_E2_C3~ ., df_clas, method = "xgbTree", trControl=my_control_class) # nolint
 
-model_class_xgbTree
+model_class_xgb_tree
 ```
 
 
@@ -143,7 +143,7 @@ model_list <- list(
   glm = model_class_glm,
   glmnet = model_class_glmnet,
   glmnet_tunning = model_class_glmnet_tuning,
-  xgbTree = model_class_xgbTree
+  xgbTree = model_class_xgb_tree
 )
 
 # Pass model_list to resamples(): resamples
