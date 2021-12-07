@@ -34,9 +34,9 @@ El objetivo de este estudio consistió en observar si se obtenía un modelo pred
 
 
 ```{r}
-df_clas <- read.csv2("data/dataset.csv")
-dim(df_clas)
-head(df_clas)
+df_class <- read.csv2("data/dataset.csv")
+dim(df_class)
+head(df_class)
 ```
 
 
@@ -84,9 +84,8 @@ Como primera aproximación al problema vamos a crear un modelo con la función g
 
 
 ```{r}
-# model_clas_glm <- train(Status_E2_C3~ ., df_clas,
-#                        method="glm",
-#                        trControl=myControl_clas)
+model_class_glm <- train(Status_E2_C3~ ., df_class, method="glm", trControl=my_control_class) # nolint
+model_class_glm
 ```
 
 ## Función train: glmnet
@@ -100,16 +99,12 @@ GLMNET intenta obtener un modelo simple y para ello proporciona un valor alpha e
 Para el próximo código utilice la función train exactamente igual que antes indicando el nuevo modelo a calcular. Los parámetros del algoritmo glmnet son por defecto y esto aplicará tres valores de alpha y 3 de lambda. Finalmente, imprima el modelo para ver cómo se ha generado.
 
 ```{r}
-
-# model_class_glmnet <- ___________________(
-#   ___________________, df_clas,
-#   method = ___________________,
-#   trControl = ___________________
-# ) # aplica 3 valores de alpha y 3 valores de lambda
-# 
-# model_class_glmnet
-
+# aplica 3 valores de alpha y 3 valores de lambda
+model_class_glmnet <- train(Status_E2_C3~ ., df_class, method="glmnet", trControl=my_control_class) # nolint
+model_class_glmnet
 ```
+
+result of the model_class_glmnet is alpha = 0.55 and lambda is 0.04251244
 
 La función train nos permite hacer un grid de parámetros del modelo para ver cuál es la mejor opción. Para ello utilice el parámetro tuneGrid = e iguale al resultado de la función expand.grid tal como se indica a continuación: 
 
